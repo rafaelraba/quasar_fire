@@ -14,8 +14,7 @@ func TopsecretHandler(dataInterpreter quasar.DataInterpreter) gin.HandlerFunc {
             return
         }
         response := new(TopSecretResponse)
-        response.Position.X = -100.00
-        response.Position.Y = 100.00
+        response.Position = resolveLocation(req.Satellites, dataInterpreter)
         response.Message = resolveMessage(req.Satellites, dataInterpreter)
         ctx.JSON(http.StatusOK, response)
     }
@@ -27,5 +26,16 @@ func resolveMessage(satellites []SatelliteRequest, interpreter quasar.DataInterp
         messages [index] = append(satellite.Message)
     }
     return interpreter.GetMessage(messages...)
-    
+}
+
+func resolveLocation(Satellites []SatelliteRequest, interpreter quasar.DataInterpreter) Position {
+    x, y := interpreter.GetLocation(
+        float32(Satellites[0].Distance),
+        float32(Satellites[1].Distance),
+        float32(Satellites[2].Distance),
+    )
+    return Position{
+        X: x,
+        Y: y,
+    }
 }

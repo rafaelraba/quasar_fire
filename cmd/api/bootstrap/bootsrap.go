@@ -1,6 +1,9 @@
 package bootstrap
 
-import "github.com/rafaelraba/quasar_fire/internal/plataform/server"
+import (
+    "github.com/rafaelraba/quasar_fire/internal/plataform/interpreter"
+    "github.com/rafaelraba/quasar_fire/internal/plataform/server"
+)
 
 const (
     host = "localhost"
@@ -8,6 +11,7 @@ const (
 )
 
 func Run() error {
-    srv := server.New(host,port)
+    dataInterpreter := interpreter.MainInterpreter{}
+    srv := server.New(host, port, dataInterpreter)
     return srv.Run()
 }

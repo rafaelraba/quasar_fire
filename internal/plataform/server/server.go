@@ -3,19 +3,23 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	quasar "github.com/rafaelraba/quasar_fire/internal"
 	"github.com/rafaelraba/quasar_fire/internal/plataform/server/handler/health"
+	satellites "github.com/rafaelraba/quasar_fire/internal/plataform/server/handler/satelites"
 	"log"
 )
 
 type Server struct {
 	httpAddr string
 	engine   *gin.Engine
+	dataInterpreter quasar.DataInterpreter
 }
 
-func New(host string, port uint) Server {
+func New(host string, port uint, interpreter quasar.DataInterpreter) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
+		dataInterpreter: interpreter,
 	}
 	srv.registerRoutes()
 	return srv
@@ -28,4 +32,5 @@ func (s *Server) Run() error {
 
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
+	s.engine.POST("/topsecret", satellites.TopsecretHandler(s.dataInterpreter))
 }

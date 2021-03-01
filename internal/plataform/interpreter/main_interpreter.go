@@ -2,6 +2,7 @@ package interpreter
 
 import (
     satellites "github.com/rafaelraba/quasar_fire/internal/plataform/server/handler/satelites"
+    "github.com/rafaelraba/quasar_fire/internal/plataform/utils"
     "strings"
 )
 
@@ -61,26 +62,26 @@ func (MainInterpreter) GetLocation(distances ...float32) (x, y float32) {
     }
     rC := distances[2]
 
-    ex := DivisionByScalar(Substract(P2, P1), VectorNorm(Substract(P2, P1)))
-    i := DotProduct(ex, Substract(P3, P1))
-    ey := DivisionByScalar(
-        Substract(
-            Substract(P3, P1),
-            MultiplyByScalar(ex, i),
+    ex := utils.DivisionByScalar(utils.Substract(P2, P1), utils.VectorNorm(utils.Substract(P2, P1)))
+    i := utils.DotProduct(ex, utils.Substract(P3, P1))
+    ey := utils.DivisionByScalar(
+        utils.Substract(
+            utils.Substract(P3, P1),
+            utils.MultiplyByScalar(ex, i),
         ),
-        VectorNorm(
-            Substract(
-                Substract(P3, P1),
-                MultiplyByScalar(ex, i),
+        utils.VectorNorm(
+            utils.Substract(
+                utils.Substract(P3, P1),
+                utils.MultiplyByScalar(ex, i),
             ),
         ),
     )
-    j := DotProduct(ey, Substract(P3, P1))
+    j := utils.DotProduct(ey, utils.Substract(P3, P1))
 
-    d := VectorNorm(Substract(P2, P1))
+    d := utils.VectorNorm(utils.Substract(P2, P1))
 
-    x = (Pow(rA, 2) - Pow(rB, 2) + Pow(d, 2)) / (2 * d)
-    y = ((Pow(rA, 2) - Pow(rC, 2) + Pow(i, 2) + Pow(j, 2)) / (2 * j)) - ((i / j) * x)
+    x = (utils.Pow(rA, 2) - utils.Pow(rB, 2) + utils.Pow(d, 2)) / (2 * d)
+    y = ((utils.Pow(rA, 2) - utils.Pow(rC, 2) + utils.Pow(i, 2) + utils.Pow(j, 2)) / (2 * j)) - ((i / j) * x)
 
     return float32(x), float32(y)
 }

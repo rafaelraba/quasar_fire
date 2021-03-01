@@ -1,4 +1,4 @@
-package interpreter
+package utils
 
 import (
     satellites "github.com/rafaelraba/quasar_fire/internal/plataform/server/handler/satelites"

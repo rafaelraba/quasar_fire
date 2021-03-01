@@ -12,7 +12,7 @@ type MainInterpreter struct {
 func (MainInterpreter) GetMessage(messages ...[]string) (msg string) {
     size := len(messages[0])
     if !validateSize(size, messages) {
-        return "Tamaño diferente"
+        return "indeterminate"
     }
     finalMessage := make([]string, size)
     for _, message := range messages {
@@ -37,7 +37,7 @@ func validateSize(size int, messages [][]string) bool {
 func resolveMessage(finalMessage []string) string {
     for _, word := range finalMessage {
         if word == "" {
-            return "No se pude determinar el mensaje"
+            return "indeterminate"
         }
     }
     return strings.Join(finalMessage, " ")

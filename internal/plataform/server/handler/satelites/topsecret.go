@@ -16,6 +16,10 @@ func TopsecretHandler(dataInterpreter quasar.DataInterpreter) gin.HandlerFunc {
         response := new(TopSecretResponse)
         response.Position = resolveLocation(req.Satellites, dataInterpreter)
         response.Message = resolveMessage(req.Satellites, dataInterpreter)
+        if response.Message == "indeterminate" {
+            ctx.Status(http.StatusBadRequest)
+            return
+        }
         ctx.JSON(http.StatusOK, response)
     }
 }

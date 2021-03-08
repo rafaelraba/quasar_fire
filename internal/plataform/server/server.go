@@ -33,4 +33,6 @@ func (s *Server) Run() error {
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
 	s.engine.POST("/topsecret", satellites.TopsecretHandler(s.dataInterpreter))
+	s.engine.GET("/topsecret", satellites.TopSecretGetHandler(s.dataInterpreter))
+	s.engine.POST("/topsecret/:satellite_name", satellites.TopSecretSaveHandler(s.dataInterpreter))
 }

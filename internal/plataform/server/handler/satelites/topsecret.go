@@ -16,11 +16,7 @@ func TopsecretHandler(dataInterpreter quasar.DataInterpreter) gin.HandlerFunc {
         response := new(TopSecretResponse)
         response.Position = resolveLocation(req.Satellites, dataInterpreter)
         response.Message = resolveMessage(req.Satellites, dataInterpreter)
-        if response.Message == "indeterminate" {
-            ctx.Status(http.StatusBadRequest)
-            return
-        }
-        ctx.JSON(http.StatusOK, response)
+        validateMessageResponse(response, ctx)
     }
 }
 
@@ -30,6 +26,15 @@ func resolveMessage(satellites []SatelliteRequest, interpreter quasar.DataInterp
         messages [index] = append(satellite.Message)
     }
     return interpreter.GetMessage(messages...)
+}
+
+func validateMessageResponse(response *TopSecretResponse, ctx *gin.Context) {
+    if response.Message == "indeterminate" {
+        info := buildMessageInfo("ERROR","message cannot be determined")
+        ctx.JSON(http.StatusBadRequest,info)
+        return
+    }
+    ctx.JSON(http.StatusOK, response)
 }
 
 func resolveLocation(Satellites []SatelliteRequest, interpreter quasar.DataInterpreter) Position {
@@ -42,4 +47,11 @@ func resolveLocation(Satellites []SatelliteRequest, interpreter quasar.DataInter
         X: x,
         Y: y,
     }
+}
+
+func buildMessageInfo(status, description string) *ResponseInfo {
+    info := new (ResponseInfo)
+    info.Description = description
+    info.Status = status
+    return info
 }

@@ -16,3 +16,16 @@ type TopSecretResponse struct {
     Position Position `json:"position"`
     Message string `json:"message"`
 }
+
+type TopSecretSplitRequest struct {
+    Distance float64 `json:"distance"`
+    Message []string `json:"message"`
+
+}
+
+type ResponseInfo struct {
+    Status      string `json:"status"`
+    Description string `json:"description"`
+}
+
+
